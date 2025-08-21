@@ -45,6 +45,11 @@ class Auth {
             if (logoutBtn) logoutBtn.style.display = 'none';
             if (adminPanel) adminPanel.style.display = 'none';
         }
+        
+        // Call global UI update if available
+        if (typeof updateAuthUI === 'function') {
+            updateAuthUI();
+        }
     }
 }
 

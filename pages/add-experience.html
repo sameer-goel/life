@@ -208,7 +208,7 @@
                     <input type="number" id="rating" name="rating" min="1" max="10" required placeholder="How significant was this experience?">
                 </div>
 
-                <button type="button" class="btn back-btn" onclick="window.location.href='index.html'">← Back to Dashboard</button>
+                <button type="button" class="btn back-btn" onclick="window.location.href='../index.html'">← Back to Dashboard</button>
                 <button type="submit" class="btn">Add Experience</button>
             </form>
         </div>
@@ -285,12 +285,10 @@
                 this.reset();
                 document.getElementById('date').valueAsDate = new Date();
 
-                // Hide success message after 3 seconds
+                // Hide success message after 2 seconds and redirect
                 setTimeout(() => {
                     document.getElementById('successMessage').style.display = 'none';
-                    if (editId) {
-                        window.location.href = 'index.html';
-                    }
+                    window.location.href = '../index.html';
                 }, 2000);
             } catch (error) {
                 console.error('Error adding/updating experience:', error);

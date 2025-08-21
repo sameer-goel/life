@@ -31,6 +31,14 @@ const db = {
         return data[0];
     },
 
+    async deleteExperience(id) {
+        const { error } = await supabase
+            .from('lifeexperiences')
+            .delete()
+            .eq('id', id);
+        if (error) throw error;
+    },
+
     // Bucket List
     async getBucketList() {
         const { data, error } = await supabase

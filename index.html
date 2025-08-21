@@ -29,6 +29,11 @@
             gap: 20px;
             height: calc(100vh - 120px);
             margin-top: 20px;
+            transition: grid-template-columns 0.3s ease;
+        }
+        
+        .dashboard-layout.collapsed {
+            grid-template-columns: 0px 1fr;
         }
         
         .stats-corner {
@@ -37,23 +42,46 @@
             display: grid;
             gap: 15px;
             height: fit-content;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-corner.collapsed {
+            width: 0;
+            opacity: 0;
+        }
+        
+        .stats-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .stats-toggle:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
         }
         
         .current-experience {
             grid-column: 2;
             grid-row: 1 / 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            min-height: 600px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
         }
         
         .header { 
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 40px;
             padding: 20px 30px;
@@ -61,6 +89,10 @@
             border-radius: 16px;
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header-left {
+            text-align: center;
         }
         
         .header-left h1 {
@@ -79,28 +111,98 @@
             font-weight: 400;
         }
         
-        .header-right {
-            display: flex;
-            gap: 15px;
-            align-items: center;
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            padding: 80px 20px 20px;
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        
+        .auth-sidebar {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100vh;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            padding: 80px 20px 20px;
+        }
+        
+        .auth-sidebar.open {
+            right: 0;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         
         .nav-btn {
-            padding: 12px 20px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 10px;
             color: #ffffff;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            margin-bottom: 10px;
         }
         
         .nav-btn:hover {
             background: rgba(102, 126, 234, 0.2);
             border-color: #667eea;
-            transform: translateY(-2px);
+            transform: translateX(5px);
         }
         
         .compact-stats {
@@ -290,53 +392,80 @@
             transform: translateY(-3px);
         }
         
-        .experience-showcase {
-            background: rgba(255,255,255,0.03);
-            border-radius: 24px;
-            padding: 60px;
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.1);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .timeline {
             position: relative;
-            overflow: hidden;
+            padding-left: 30px;
         }
         
-        .experience-media {
-            width: 400px;
-            height: 400px;
-            object-fit: cover;
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .timeline-item {
+            background: rgba(255,255,255,0.05);
             border-radius: 16px;
+            padding: 30px;
             margin-bottom: 30px;
+            position: relative;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .experience-title-main {
-            font-size: 4rem;
+        .timeline-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -37px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid #0f0f23;
+        }
+        
+        .timeline-image {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-title {
+            font-size: 1.8rem;
             font-weight: 700;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
-            line-height: 1.2;
+            margin-bottom: 15px;
         }
         
-        .experience-description-main {
-            font-size: 1.4rem;
+        .timeline-description {
+            font-size: 1rem;
             color: #a0a0a0;
             line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto 30px;
+            margin-bottom: 20px;
         }
         
-        .experience-meta {
+        .timeline-meta {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
         }
         
         .meta-item {
@@ -347,21 +476,22 @@
             font-size: 1rem;
         }
         
-        .edit-btn {
+        .timeline-edit-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
+            border-radius: 8px;
             color: #ffffff;
-            padding: 10px 15px;
+            padding: 8px 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            font-size: 0.9rem;
         }
         
-        .edit-btn:hover {
+        .timeline-edit-btn:hover {
             background: rgba(102, 126, 234, 0.2);
             border-color: #667eea;
         }
@@ -569,19 +699,32 @@
 </head>
 <body>
     <div class="container">
+        <button class="menu-toggle" onclick="toggleAuthSidebar()">☰</button>
+        <button class="stats-toggle" onclick="toggleStats()" title="Toggle Stats Panel">👁️</button>
+        <button class="menu-toggle" onclick="toggleAuthSidebar()" title="Login/Logout">🔑</button>
+        
+        <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+        <div class="sidebar" id="sidebar">
+            <!-- Empty left sidebar -->
+        </div>
+        
+        <div class="auth-sidebar" id="authSidebar">
+            <button class="nav-btn" id="sidebarLoginBtn" onclick="showLoginModal()" style="background: #28a745;">🔑 Login</button>
+            <button class="nav-btn" id="sidebarLogoutBtn" onclick="handleLogout()" style="display: none; background: #dc3545;">🚪 Logout</button>
+            <a href="pages/experiences.html" class="nav-btn admin-only" style="display: none;">📊 All Experiences</a>
+            <a href="pages/bucket-list.html" class="nav-btn admin-only" style="display: none;">🎯 Bucket List</a>
+            <a href="pages/add-experience.html" class="nav-btn admin-only" style="display: none;">➕ Add Experience</a>
+        </div>
+        
         <div class="header">
             <div class="header-left">
                 <h1>Life is to Live Fully.</h1>
                 <p>Life to Create Expereicens for Self.</p>
             </div>
-            <div class="header-right">
-                <a href="pages/experiences.html" class="nav-btn">📊 Analytics</a>
-                <a href="pages/bucket-list.html" class="nav-btn">🎯 Goals</a>
-            </div>
         </div>
 
-        <div class="dashboard-layout">
-            <div class="stats-corner">
+        <div class="dashboard-layout" id="dashboardLayout">
+            <div class="stats-corner" id="statsCorner">
                 <div class="compact-stats">
                     <h3>⏰ Time Left</h3>
                     <div class="compact-grid">
@@ -646,42 +789,48 @@
                 <div class="widget">
                     <div class="widget-header">
                         <div class="widget-title">
-                            <span class="widget-icon">📊</span>
-                            Stats
+                            <span class="widget-icon">📝</span>
+                            Recent Experiences
                         </div>
                     </div>
-                    <div class="quick-stats">
-                        <div class="quick-stat">
-                            <div class="quick-stat-number" id="totalExperiences">0</div>
-                            <div class="quick-stat-label">Experiences</div>
-                        </div>
-                        <div class="quick-stat">
-                            <div class="quick-stat-number" id="totalGoals">0</div>
-                            <div class="quick-stat-label">Goals</div>
-                        </div>
+                    <div id="recentExperiences" style="max-height: 200px; overflow-y: auto;">
+                        Loading...
                     </div>
                 </div>
+
+
             </div>
 
             <div class="current-experience">
-                <div class="experience-showcase" id="currentExperienceShowcase">
-                    <button class="edit-btn" onclick="editCurrentExperience()" id="editBtn" style="display: none;">✏️ Edit</button>
-                    <div id="currentExperienceContent">
-                        <div class="no-experience">No current experience set. Add your first experience to get started!</div>
-                    </div>
+                <div class="timeline" id="experienceTimeline">
+                    <div class="no-experience" style="text-align: center; padding: 60px; color: #666;">Loading experiences...</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="floating-actions">
-        <button class="fab fab-secondary" onclick="window.location.href='pages/bucket-list.html'" title="Add Goal">🎯</button>
-        <button class="fab fab-primary" onclick="window.location.href='pages/add-experience.html'" title="Add Experience">+</button>
+        <button class="fab fab-secondary admin-only" onclick="window.location.href='pages/bucket-list.html'" title="Bucket List" style="display: none;">🎯</button>
+        <button class="fab fab-primary admin-only" onclick="window.location.href='pages/add-experience.html'" title="Add Experience" style="display: none;">+</button>
+    </div>
+    
+    <div id="loginModal" class="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div class="login-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 300px; color: #333;">
+            <h3>Admin Login</h3>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
+                <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
+                <button type="submit" style="width: 100%; margin-bottom: 10px; background: #007bff; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;">Login</button>
+                <button type="button" onclick="closeLoginModal()" style="width: 100%; background: #6c757d; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;">Cancel</button>
+            </form>
+            <div id="loginError" style="color: red; margin-top: 10px; display: none;"></div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
     <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
     <script>
         // Calculate real-time remaining time
         function updateTimeRemaining() {
@@ -715,58 +864,54 @@
             if (winters) winters.textContent = remainingSeasons;
         }
 
-        // Load current experience showcase
-        async function loadCurrentExperience() {
+        // Load experiences timeline
+        async function loadExperienceTimeline() {
             try {
-                console.log('Loading current experience...');
+                console.log('Loading experiences timeline...');
                 const experiences = await db.getExperiences();
                 console.log('Experiences loaded:', experiences.length);
-                const container = document.getElementById('currentExperienceContent');
-                const editBtn = document.getElementById('editBtn');
+                const container = document.getElementById('experienceTimeline');
                 
                 if (experiences.length === 0) {
                     container.innerHTML = `
-                        <div class="no-experience">
+                        <div style="text-align: center; padding: 60px; color: #666;">
                             <h2 style="margin-bottom: 20px;">Welcome to Your Life Dashboard!</h2>
-                            <p style="margin-bottom: 30px;">Start documenting your life experiences to see them showcased here.</p>
+                            <p style="margin-bottom: 30px;">Start documenting your life experiences to see them in your timeline.</p>
                             <button onclick="window.location.href='pages/add-experience.html'" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 16px; cursor: pointer;">Add Your First Experience</button>
                         </div>
                     `;
-                    editBtn.style.display = 'none';
                     return;
                 }
 
-                const currentExp = experiences[0]; // Most recent experience
-                console.log('Current experience:', currentExp);
-                console.log('Image URL:', currentExp.image_url);
-                editBtn.style.display = 'block';
-                editBtn.onclick = () => editCurrentExperience(currentExp.id);
-                
-                container.innerHTML = `
-                    ${currentExp.image_url ? `<img src="${currentExp.image_url}" alt="${currentExp.title}" class="experience-media" onerror="console.log('Image failed to load:', this.src)">` : '<div style="color: #666; margin-bottom: 30px;">No image provided</div>'}
-                    <h1 class="experience-title-main">${currentExp.title}</h1>
-                    <p class="experience-description-main">${currentExp.description}</p>
-                    <div class="experience-meta">
-                        <div class="meta-item">
-                            <span>📅</span>
-                            <span>${new Date(currentExp.date).toLocaleDateString()}</span>
-                        </div>
-                        ${currentExp.target_date ? `<div class="meta-item"><span>🎯</span><span>Target: ${new Date(currentExp.target_date).toLocaleDateString()}</span></div>` : ''}
-                        <div class="meta-item">
-                            <span>🏷️</span>
-                            <span>${currentExp.category}</span>
-                        </div>
-                        <div class="meta-item">
-                            <span>⭐</span>
-                            <span>${currentExp.rating}/10</span>
+                container.innerHTML = experiences.map(exp => `
+                    <div style="background: rgba(255,255,255,0.03); border-radius: 24px; padding: 60px; backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1); width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; overflow: hidden; margin-bottom: 30px; min-height: 400px;">
+                        <button class="timeline-edit-btn admin-only" onclick="editCurrentExperience(${exp.id})" style="position: absolute; top: 20px; right: 20px; display: none;">✏️ Edit</button>
+                        ${exp.image_url ? `<img src="${exp.image_url}" alt="${exp.title}" style="width: 400px; height: 400px; object-fit: cover; border-radius: 16px; margin-bottom: 30px;" onerror="this.style.display='none'">` : ''}
+                        <h1 style="font-size: 4rem; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px; line-height: 1.2;">${exp.title}</h1>
+                        <p style="font-size: 1.4rem; color: #a0a0a0; line-height: 1.6; max-width: 800px; margin: 0 auto 30px;">${exp.description}</p>
+                        <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px;">
+                            <div class="meta-item">
+                                <span>📅</span>
+                                <span>${new Date(exp.date).toLocaleDateString()}</span>
+                            </div>
+                            ${exp.target_date ? `<div class="meta-item"><span>🎯</span><span>Target: ${new Date(exp.target_date).toLocaleDateString()}</span></div>` : ''}
+                            ${exp.target_date ? `<div class="meta-item"><span>📊</span><span>Days: ${Math.abs(Math.ceil((new Date(exp.target_date) - new Date(exp.date)) / (1000 * 60 * 60 * 24)))}</span></div>` : ''}
+                            <div class="meta-item">
+                                <span>🏷️</span>
+                                <span>${exp.category}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>⭐</span>
+                                <span>${exp.rating}/10</span>
+                            </div>
                         </div>
                     </div>
-                `;
+                `).join('');
             } catch (error) {
-                console.error('Error loading current experience:', error);
-                document.getElementById('currentExperienceContent').innerHTML = `
-                    <div class="no-experience">
-                        <h2 style="color: #ff6b6b; margin-bottom: 20px;">Connection Issue</h2>
+                console.error('Error loading experiences timeline:', error);
+                document.getElementById('experienceTimeline').innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: #ff6b6b;">
+                        <h2 style="margin-bottom: 20px;">Connection Issue</h2>
                         <p style="margin-bottom: 20px;">Unable to load experiences. Please check:</p>
                         <ul style="text-align: left; margin-bottom: 30px;">
                             <li>Database connection is working</li>
@@ -804,10 +949,34 @@
                         <div style="font-weight: 600;">${item.title}</div>
                         <div style="font-size: 0.9em; color: #666;">${item.category}</div>
                     </div>
-                `).join('') + (bucketList.filter(item => !item.completed).length > 3 ? '<p style="text-align: center; margin-top: 15px;"><a href="bucket-list.html" style="color: #667eea;">View all goals →</a></p>' : '');
+                `).join('') + (bucketList.filter(item => !item.completed).length > 3 ? '<p style="text-align: center; margin-top: 15px;"><a href="pages/bucket-list.html" style="color: #667eea;">View all goals →</a></p>' : '');
             } catch (error) {
                 console.error('Error loading bucket list:', error);
                 document.getElementById('bucketListPreview').innerHTML = '<p style="color: #666; text-align: center;">Error loading bucket list</p>';
+            }
+        }
+
+        // Load recent experiences
+        async function loadRecentExperiences() {
+            try {
+                const experiences = await db.getExperiences();
+                const container = document.getElementById('recentExperiences');
+                
+                if (experiences.length === 0) {
+                    container.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No experiences yet</p>';
+                    return;
+                }
+
+                const recent = experiences.slice(0, 5); // Show last 5 experiences
+                container.innerHTML = recent.map(exp => `
+                    <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer;" onclick="editCurrentExperience(${exp.id})">
+                        <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 3px;">${exp.title}</div>
+                        <div style="font-size: 0.8rem; color: #a0a0a0;">${new Date(exp.date).toLocaleDateString()} • ${exp.category}</div>
+                    </div>
+                `).join('') + (experiences.length > 5 ? '<p style="text-align: center; margin-top: 10px;"><a href="pages/experiences.html" style="color: #667eea; font-size: 0.9rem;">View all →</a></p>' : '');
+            } catch (error) {
+                console.error('Error loading recent experiences:', error);
+                document.getElementById('recentExperiences').innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Error loading experiences</p>';
             }
         }
 
@@ -844,9 +1013,94 @@
             if (dateEl) dateEl.textContent = dateString;
         }
 
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        function toggleAuthSidebar() {
+            const authSidebar = document.getElementById('authSidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            authSidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const authSidebar = document.getElementById('authSidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.remove('open');
+            authSidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+        
+        function toggleStats() {
+            const layout = document.getElementById('dashboardLayout');
+            const stats = document.getElementById('statsCorner');
+            layout.classList.toggle('collapsed');
+            stats.classList.toggle('collapsed');
+        }
+        
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        
+        // Enhanced auth update UI function
+        function updateAuthUI() {
+            const adminElements = document.querySelectorAll('.admin-only');
+            const sidebarLoginBtn = document.getElementById('sidebarLoginBtn');
+            const sidebarLogoutBtn = document.getElementById('sidebarLogoutBtn');
+            
+            if (auth.isAdmin()) {
+                adminElements.forEach(el => el.style.display = el.tagName === 'BUTTON' ? 'inline-block' : 'block');
+                if (sidebarLoginBtn) sidebarLoginBtn.style.display = 'none';
+                if (sidebarLogoutBtn) sidebarLogoutBtn.style.display = 'block';
+            } else {
+                adminElements.forEach(el => el.style.display = 'none');
+                if (sidebarLoginBtn) sidebarLoginBtn.style.display = 'block';
+                if (sidebarLogoutBtn) sidebarLogoutBtn.style.display = 'none';
+            }
+        }
+        
+        async function handleLogout() {
+            await auth.signOut();
+            closeSidebar();
+            await loadExperienceTimeline(); // Reload to hide edit buttons
+        }
+        
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            try {
+                await auth.signIn(email, password);
+                closeLoginModal();
+                closeSidebar();
+                await loadExperienceTimeline(); // Reload to show edit buttons
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Initialize auth and UI
+        auth.checkAuth().then(() => {
+            updateAuthUI();
+            loadExperienceTimeline();
+        });
+        
         updateTimeRemaining();
-        loadCurrentExperience();
         loadBucketListPreview();
+        loadRecentExperiences();
         loadQuickStats();
         updateClock();
         setInterval(updateTimeRemaining, 60000); // Update every minute
