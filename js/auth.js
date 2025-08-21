@@ -4,12 +4,27 @@ class Auth {
     }
 
     async checkAuth() {
-        const { data: { user } } = await supabase.auth.getUser();
-        this.user = user;
-        this.updateUI();
+        if (!supabase) {
+            console.error('Supabase client not initialized');
+            this.user = null;
+            this.updateUI();
+            return;
+        }
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            this.user = user;
+            this.updateUI();
+        } catch (error) {
+            console.error('Error checking auth:', error);
+            this.user = null;
+            this.updateUI();
+        }
     }
 
     async signIn(email, password) {
+        if (!supabase) {
+            throw new Error('Supabase client not initialized');
+        }
         const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password

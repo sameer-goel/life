@@ -86,7 +86,7 @@ This isn't just another productivity app. It's a **life awareness tool** that he
 
 ### 🌟 Ready to Start Living More Intentionally?
 
-**[🚀 Try the Live Demo](https://your-demo-url.com)**
+**[🚀 Try the Live Demo](https://sameer-goel.github.io/life/)**
 
 *Start tracking your experiences and make every moment count*
 

@@ -938,6 +938,11 @@
                 const bucketList = await db.getBucketList();
                 const container = document.getElementById('bucketListPreview');
                 
+                if (!container) {
+                    console.log('Bucket list preview container not found');
+                    return;
+                }
+                
                 if (bucketList.length === 0) {
                     container.innerHTML = '<p style="color: #666; text-align: center;">No bucket list items yet. <a href="pages/bucket-list.html" style="color: #667eea;">Add your first goal!</a></p>';
                     return;
@@ -952,7 +957,10 @@
                 `).join('') + (bucketList.filter(item => !item.completed).length > 3 ? '<p style="text-align: center; margin-top: 15px;"><a href="pages/bucket-list.html" style="color: #667eea;">View all goals →</a></p>' : '');
             } catch (error) {
                 console.error('Error loading bucket list:', error);
-                document.getElementById('bucketListPreview').innerHTML = '<p style="color: #666; text-align: center;">Error loading bucket list</p>';
+                const container = document.getElementById('bucketListPreview');
+                if (container) {
+                    container.innerHTML = '<p style="color: #666; text-align: center;">Error loading bucket list</p>';
+                }
             }
         }
 
@@ -988,8 +996,11 @@
                     db.getBucketList()
                 ]);
                 
-                document.getElementById('totalExperiences').textContent = experiences.length;
-                document.getElementById('totalGoals').textContent = bucketList.length;
+                const totalExpEl = document.getElementById('totalExperiences');
+                const totalGoalsEl = document.getElementById('totalGoals');
+                
+                if (totalExpEl) totalExpEl.textContent = experiences.length;
+                if (totalGoalsEl) totalGoalsEl.textContent = bucketList.length;
             } catch (error) {
                 console.error('Error loading quick stats:', error);
             }
