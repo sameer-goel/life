@@ -1,5 +1,3 @@
-// Supabase configuration is loaded from config.js
-
 // Database operations
 const db = {
     // Experiences
@@ -28,6 +26,9 @@ const db = {
     },
 
     async updateExperience(id, experience) {
+        if (!supabase) {
+            throw new Error('Supabase client not initialized');
+        }
         const { data, error } = await supabase
             .from('lifeexperiences')
             .update(experience)
@@ -38,6 +39,9 @@ const db = {
     },
 
     async deleteExperience(id) {
+        if (!supabase) {
+            throw new Error('Supabase client not initialized');
+        }
         const { error } = await supabase
             .from('lifeexperiences')
             .delete()
@@ -59,6 +63,9 @@ const db = {
     },
 
     async addBucketItem(item) {
+        if (!supabase) {
+            throw new Error('Supabase client not initialized');
+        }
         const { data, error } = await supabase
             .from('bucket_list')
             .insert([item])
@@ -68,6 +75,9 @@ const db = {
     },
 
     async updateBucketItem(id, updates) {
+        if (!supabase) {
+            throw new Error('Supabase client not initialized');
+        }
         const { data, error } = await supabase
             .from('bucket_list')
             .update(updates)
@@ -78,6 +88,9 @@ const db = {
     },
 
     async deleteBucketItem(id) {
+        if (!supabase) {
+            throw new Error('Supabase client not initialized');
+        }
         const { error } = await supabase
             .from('bucket_list')
             .delete()
