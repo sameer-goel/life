@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Journey - Time & Experiences</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+        }
+        
+        .container { 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+            height: calc(100vh - 120px);
+            margin-top: 20px;
+        }
+        
+        .stats-corner {
+            grid-column: 1;
+            grid-row: 1 / 3;
+            display: grid;
+            gap: 15px;
+            height: fit-content;
+        }
+        
+        .current-experience {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            min-height: 600px;
+        }
+        
+        .header { 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header-left h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+        
+        .header-left p {
+            font-size: 1rem;
+            color: #a0a0a0;
+            font-weight: 400;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .compact-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .compact-stats h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .compact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .compact-stat {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        
+        .compact-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .compact-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .time-remaining h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .time-stats { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 30px; 
+            margin-top: 30px; 
+        }
+        
+        .stat { 
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .stat-number { 
+            font-size: 3.5rem; 
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label { 
+            font-size: 1.1rem; 
+            opacity: 0.9;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .compact-seasons {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(255, 154, 158, 0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .compact-seasons h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .seasons-compact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .season-compact {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 8px;
+        }
+        
+        .season-icon-small {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .season-count-small {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .season-label-small {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        
+        .seasons h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .seasons-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 25px; 
+            margin-top: 30px; 
+        }
+        
+        .season { 
+            text-align: center; 
+            background: rgba(255,255,255,0.4); 
+            padding: 30px; 
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .season:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .season-icon { 
+            font-size: 3rem; 
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+        
+        .season-count { 
+            font-size: 2.5rem; 
+            font-weight: 700;
+        }
+        
+        .season-label { 
+            font-size: 1rem; 
+            opacity: 0.8;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        
+        .widget {
+            background: rgba(255,255,255,0.05); 
+            padding: 20px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .widget:hover {
+            transform: translateY(-3px);
+        }
+        
+        .experience-showcase {
+            background: rgba(255,255,255,0.03);
+            border-radius: 24px;
+            padding: 60px;
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .experience-media {
+            width: 400px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .experience-title-main {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .experience-description-main {
+            font-size: 1.4rem;
+            color: #a0a0a0;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .experience-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #a0a0a0;
+            font-size: 1rem;
+        }
+        
+        .edit-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .edit-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+        
+        .no-experience {
+            color: #666;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .widget-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .widget-icon {
+            font-size: 1.2rem;
+        }
+        
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .quick-stat {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .quick-stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .quick-stat-label {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            font-weight: 500;
+        }
+        
+        .life-progress {
+            margin: 20px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+        
+        .experiences h2, .bucket-list h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+        
+        .experience-item { 
+            padding: 25px; 
+            border-left: 4px solid #667eea; 
+            margin-bottom: 20px; 
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .experience-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .experience-date { 
+            color: #a0a0a0; 
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .experience-title { 
+            font-weight: 600; 
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+        
+        .floating-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .fab-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .fab-secondary {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+        
+        .fab:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .progress-bar { 
+            background: rgba(255,255,255,0.2); 
+            height: 12px; 
+            border-radius: 6px; 
+            margin-top: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill { 
+            background: linear-gradient(90deg, #ffffff 0%, #f0f0f0 100%);
+            height: 100%; 
+            border-radius: 6px; 
+            transition: width 0.8s ease;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        
+        a:hover {
+            color: #764ba2;
+        }
+        
+        @media (max-width: 1200px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+                height: auto;
+            }
+            
+            .stats-corner {
+                grid-column: 1;
+                grid-row: 1;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .current-experience {
+                grid-column: 1;
+                grid-row: 2;
+                min-height: 400px;
+            }
+            
+            .experience-title-main {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-left h1 { font-size: 2rem; }
+            .experience-title-main { font-size: 2rem; }
+            .experience-description-main { font-size: 1.1rem; }
+            .experience-showcase { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>Life is to Live Fully.</h1>
+                <p>Life to Create Expereicens for Self.</p>
+            </div>
+            <div class="header-right">
+                <a href="pages/experiences.html" class="nav-btn">📊 Analytics</a>
+                <a href="pages/bucket-list.html" class="nav-btn">🎯 Goals</a>
+            </div>
+        </div>
+
+        <div class="dashboard-layout">
+            <div class="stats-corner">
+                <div class="compact-stats">
+                    <h3>⏰ Time Left</h3>
+                    <div class="compact-grid">
+                        <div class="compact-stat">
+                            <div class="compact-number" id="years">41</div>
+                            <div class="compact-label">Years</div>
+                        </div>
+                        <div class="compact-stat">
+                            <div class="compact-number" id="days">14965</div>
+                            <div class="compact-label">Days</div>
+                        </div>
+                    </div>
+                    <div class="life-progress">
+                        <div class="progress-label">
+                            <span>Life: 45.3%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45.3%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="compact-seasons">
+                    <h3>🌍 Seasons Left</h3>
+                    <div class="seasons-compact">
+                        <div class="season-compact">
+                            <div class="season-icon-small">🌸</div>
+                            <div class="season-count-small" id="springs">41</div>
+                            <div class="season-label-small">Springs</div>
+                        </div>
+                        <div class="season-compact">
+                            <div class="season-icon-small">☀️</div>
+                            <div class="season-count-small" id="summers">41</div>
+                            <div class="season-label-small">Summers</div>
+                        </div>
+                        <div class="season-compact">
+                            <div class="season-icon-small">🍂</div>
+                            <div class="season-count-small" id="autumns">41</div>
+                            <div class="season-label-small">Autumns</div>
+                        </div>
+                        <div class="season-compact">
+                            <div class="season-icon-small">❄️</div>
+                            <div class="season-count-small" id="winters">41</div>
+                            <div class="season-label-small">Winters</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header">
+                        <div class="widget-title">
+                            <span class="widget-icon">🕐</span>
+                            Current Time
+                        </div>
+                    </div>
+                    <div style="text-align: center; padding: 20px;">
+                        <div id="currentTime" style="font-size: 1.8rem; font-weight: 700; color: #667eea; margin-bottom: 10px;">00:00:00</div>
+                        <div id="currentDate" style="font-size: 1rem; color: #a0a0a0;">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-header">
+                        <div class="widget-title">
+                            <span class="widget-icon">📊</span>
+                            Stats
+                        </div>
+                    </div>
+                    <div class="quick-stats">
+                        <div class="quick-stat">
+                            <div class="quick-stat-number" id="totalExperiences">0</div>
+                            <div class="quick-stat-label">Experiences</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="quick-stat-number" id="totalGoals">0</div>
+                            <div class="quick-stat-label">Goals</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="current-experience">
+                <div class="experience-showcase" id="currentExperienceShowcase">
+                    <button class="edit-btn" onclick="editCurrentExperience()" id="editBtn" style="display: none;">✏️ Edit</button>
+                    <div id="currentExperienceContent">
+                        <div class="no-experience">No current experience set. Add your first experience to get started!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-actions">
+        <button class="fab fab-secondary" onclick="window.location.href='pages/bucket-list.html'" title="Add Goal">🎯</button>
+        <button class="fab fab-primary" onclick="window.location.href='pages/add-experience.html'" title="Add Experience">+</button>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/db.js"></script>
+    <script>
+        // Calculate real-time remaining time
+        function updateTimeRemaining() {
+            const birthDate = new Date('1990-01-01'); // Adjust your birth date
+            const targetAge = 75;
+            const now = new Date();
+            const currentAge = (now - birthDate) / (365.25 * 24 * 60 * 60 * 1000);
+            const remainingYears = targetAge - currentAge;
+            const remainingSeasons = Math.floor(remainingYears);
+            
+            // Safely update elements if they exist
+            const years = document.getElementById('years');
+            const months = document.getElementById('months');
+            const days = document.getElementById('days');
+            const hours = document.getElementById('hours');
+            
+            if (years) years.textContent = Math.floor(remainingYears);
+            if (months) months.textContent = Math.floor(remainingYears * 12);
+            if (days) days.textContent = Math.floor(remainingYears * 365.25);
+            if (hours) hours.textContent = Math.floor(remainingYears * 365.25 * 24);
+            
+            // Update seasons safely
+            const springs = document.getElementById('springs');
+            const summers = document.getElementById('summers');
+            const autumns = document.getElementById('autumns');
+            const winters = document.getElementById('winters');
+            
+            if (springs) springs.textContent = remainingSeasons;
+            if (summers) summers.textContent = remainingSeasons;
+            if (autumns) autumns.textContent = remainingSeasons;
+            if (winters) winters.textContent = remainingSeasons;
+        }
+
+        // Load current experience showcase
+        async function loadCurrentExperience() {
+            try {
+                console.log('Loading current experience...');
+                const experiences = await db.getExperiences();
+                console.log('Experiences loaded:', experiences.length);
+                const container = document.getElementById('currentExperienceContent');
+                const editBtn = document.getElementById('editBtn');
+                
+                if (experiences.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-experience">
+                            <h2 style="margin-bottom: 20px;">Welcome to Your Life Dashboard!</h2>
+                            <p style="margin-bottom: 30px;">Start documenting your life experiences to see them showcased here.</p>
+                            <button onclick="window.location.href='pages/add-experience.html'" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 16px; cursor: pointer;">Add Your First Experience</button>
+                        </div>
+                    `;
+                    editBtn.style.display = 'none';
+                    return;
+                }
+
+                const currentExp = experiences[0]; // Most recent experience
+                console.log('Current experience:', currentExp);
+                console.log('Image URL:', currentExp.image_url);
+                editBtn.style.display = 'block';
+                editBtn.onclick = () => editCurrentExperience(currentExp.id);
+                
+                container.innerHTML = `
+                    ${currentExp.image_url ? `<img src="${currentExp.image_url}" alt="${currentExp.title}" class="experience-media" onerror="console.log('Image failed to load:', this.src)">` : '<div style="color: #666; margin-bottom: 30px;">No image provided</div>'}
+                    <h1 class="experience-title-main">${currentExp.title}</h1>
+                    <p class="experience-description-main">${currentExp.description}</p>
+                    <div class="experience-meta">
+                        <div class="meta-item">
+                            <span>📅</span>
+                            <span>${new Date(currentExp.date).toLocaleDateString()}</span>
+                        </div>
+                        ${currentExp.target_date ? `<div class="meta-item"><span>🎯</span><span>Target: ${new Date(currentExp.target_date).toLocaleDateString()}</span></div>` : ''}
+                        <div class="meta-item">
+                            <span>🏷️</span>
+                            <span>${currentExp.category}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>⭐</span>
+                            <span>${currentExp.rating}/10</span>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading current experience:', error);
+                document.getElementById('currentExperienceContent').innerHTML = `
+                    <div class="no-experience">
+                        <h2 style="color: #ff6b6b; margin-bottom: 20px;">Connection Issue</h2>
+                        <p style="margin-bottom: 20px;">Unable to load experiences. Please check:</p>
+                        <ul style="text-align: left; margin-bottom: 30px;">
+                            <li>Database connection is working</li>
+                            <li>Tables are created properly</li>
+                            <li>Check browser console for errors</li>
+                        </ul>
+                        <button onclick="window.location.href='pages/test-crud.html'" style="background: #ff6b6b; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 16px; cursor: pointer;">Test Database</button>
+                    </div>
+                `;
+            }
+        }
+        
+        function editCurrentExperience(id) {
+            if (id) {
+                window.location.href = `pages/add-experience.html?edit=${id}`;
+            } else {
+                window.location.href = 'pages/add-experience.html';
+            }
+        }
+
+        // Load bucket list preview
+        async function loadBucketListPreview() {
+            try {
+                const bucketList = await db.getBucketList();
+                const container = document.getElementById('bucketListPreview');
+                
+                if (bucketList.length === 0) {
+                    container.innerHTML = '<p style="color: #666; text-align: center;">No bucket list items yet. <a href="pages/bucket-list.html" style="color: #667eea;">Add your first goal!</a></p>';
+                    return;
+                }
+
+                const incomplete = bucketList.filter(item => !item.completed).slice(0, 3);
+                container.innerHTML = incomplete.map(item => `
+                    <div style="padding: 10px; border-left: 3px solid #ff9a9e; margin-bottom: 10px; background: #fef7f7;">
+                        <div style="font-weight: 600;">${item.title}</div>
+                        <div style="font-size: 0.9em; color: #666;">${item.category}</div>
+                    </div>
+                `).join('') + (bucketList.filter(item => !item.completed).length > 3 ? '<p style="text-align: center; margin-top: 15px;"><a href="bucket-list.html" style="color: #667eea;">View all goals →</a></p>' : '');
+            } catch (error) {
+                console.error('Error loading bucket list:', error);
+                document.getElementById('bucketListPreview').innerHTML = '<p style="color: #666; text-align: center;">Error loading bucket list</p>';
+            }
+        }
+
+        // Load quick stats
+        async function loadQuickStats() {
+            try {
+                const [experiences, bucketList] = await Promise.all([
+                    db.getExperiences(),
+                    db.getBucketList()
+                ]);
+                
+                document.getElementById('totalExperiences').textContent = experiences.length;
+                document.getElementById('totalGoals').textContent = bucketList.length;
+            } catch (error) {
+                console.error('Error loading quick stats:', error);
+            }
+        }
+
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            const timeEl = document.getElementById('currentTime');
+            const dateEl = document.getElementById('currentDate');
+            
+            if (timeEl) timeEl.textContent = timeString;
+            if (dateEl) dateEl.textContent = dateString;
+        }
+
+        updateTimeRemaining();
+        loadCurrentExperience();
+        loadBucketListPreview();
+        loadQuickStats();
+        updateClock();
+        setInterval(updateTimeRemaining, 60000); // Update every minute
+        setInterval(updateClock, 1000); // Update every second
+    </script>
+</body>
+</html>

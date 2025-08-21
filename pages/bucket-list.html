@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bucket List - Life Journey</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .add-form { background: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .form-row input, .form-row select { flex: 1; padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; }
+        .add-btn { background: #ff9a9e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .stat-number { font-size: 1.8em; font-weight: bold; color: #ff9a9e; }
+        .filters { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .bucket-items { display: grid; gap: 15px; }
+        .bucket-item { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px; }
+        .bucket-item.completed { opacity: 0.7; background: #f8f9fa; }
+        .bucket-item input[type="checkbox"] { width: 20px; height: 20px; }
+        .bucket-content { flex: 1; }
+        .bucket-title { font-weight: bold; margin-bottom: 5px; }
+        .bucket-category { color: #666; font-size: 0.9em; }
+        .bucket-priority { padding: 4px 8px; border-radius: 12px; font-size: 0.8em; color: white; }
+        .priority-high { background: #dc3545; }
+        .priority-medium { background: #ffc107; color: #333; }
+        .priority-low { background: #28a745; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        .back-btn { position: fixed; top: 20px; left: 20px; background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Dashboard</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Your Bucket List</h1>
+            <p>Dreams and goals to achieve in your lifetime</p>
+        </div>
+
+        <div class="add-form">
+            <h3 style="margin-bottom: 15px;">Add New Goal</h3>
+            <form id="bucketForm">
+                <div class="form-row">
+                    <input type="text" id="title" placeholder="Goal title" required>
+                    <select id="category" required>
+                        <option value="">Category</option>
+                        <option value="travel">Travel</option>
+                        <option value="career">Career</option>
+                        <option value="learning">Learning</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="relationships">Relationships</option>
+                        <option value="health">Health</option>
+                        <option value="creative">Creative</option>
+                        <option value="financial">Financial</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select id="priority" required>
+                        <option value="">Priority</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <button type="submit" class="add-btn">Add Goal</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="stats" id="stats">
+            <!-- Stats will be populated here -->
+        </div>
+
+        <div class="filters">
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <label>Filter:</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="travel">Travel</option>
+                    <option value="career">Career</option>
+                    <option value="learning">Learning</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="relationships">Relationships</option>
+                    <option value="health">Health</option>
+                    <option value="creative">Creative</option>
+                    <option value="financial">Financial</option>
+                    <option value="other">Other</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">All Items</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+                <select id="priorityFilter">
+                    <option value="">All Priorities</option>
+                    <option value="high">High Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="low">Low Priority</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="bucket-items" id="bucketItems">
+            <!-- Bucket list items will be loaded here -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script>
+        let bucketList = [];
+
+        function loadStats() {
+            const total = bucketList.length;
+            const completed = bucketList.filter(item => item.completed).length;
+            const pending = total - completed;
+            const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${total}</div>
+                    <div class="stat-label">Total Goals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${completed}</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${pending}</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${completionRate}%</div>
+                    <div class="stat-label">Progress</div>
+                </div>
+            `;
+        }
+
+        function renderBucketList(items) {
+            const container = document.getElementById('bucketItems');
+            
+            if (items.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No goals found. Add your first bucket list item above!</p>';
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+                <div class="bucket-item ${item.completed ? 'completed' : ''}">
+                    <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleComplete(${item.id})">
+                    <div class="bucket-content">
+                        <div class="bucket-title">${item.title}</div>
+                        <div class="bucket-category">${item.category}</div>
+                    </div>
+                    <span class="bucket-priority priority-${item.priority}">${item.priority}</span>
+                    <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function filterItems() {
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            
+            let filtered = bucketList;
+            
+            if (categoryFilter) filtered = filtered.filter(item => item.category === categoryFilter);
+            if (statusFilter === 'completed') filtered = filtered.filter(item => item.completed);
+            if (statusFilter === 'pending') filtered = filtered.filter(item => !item.completed);
+            if (priorityFilter) filtered = filtered.filter(item => item.priority === priorityFilter);
+            
+            renderBucketList(filtered);
+        }
+
+        async function toggleComplete(id) {
+            try {
+                const item = bucketList.find(item => item.id === id);
+                if (item) {
+                    const updates = {
+                        completed: !item.completed,
+                        completed_date: !item.completed ? new Date().toISOString() : null
+                    };
+                    await db.updateBucketItem(id, updates);
+                    await init(); // Reload data
+                }
+            } catch (error) {
+                console.error('Error updating item:', error);
+                alert('Error updating item. Please try again.');
+            }
+        }
+
+        async function deleteItem(id) {
+            if (confirm('Are you sure you want to delete this goal?')) {
+                try {
+                    await db.deleteBucketItem(id);
+                    await init(); // Reload data
+                } catch (error) {
+                    console.error('Error deleting item:', error);
+                    alert('Error deleting item. Please try again.');
+                }
+            }
+        }
+
+        document.getElementById('bucketForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newItem = {
+                title: formData.get('title'),
+                category: formData.get('category'),
+                priority: formData.get('priority'),
+                completed: false
+            };
+
+            try {
+                await db.addBucketItem(newItem);
+                this.reset();
+                await init(); // Reload data
+            } catch (error) {
+                console.error('Error adding item:', error);
+                alert('Error adding item. Please try again.');
+            }
+        });
+
+        async function init() {
+            try {
+                bucketList = await db.getBucketList();
+                loadStats();
+                filterItems();
+                
+                document.getElementById('categoryFilter').addEventListener('change', filterItems);
+                document.getElementById('statusFilter').addEventListener('change', filterItems);
+                document.getElementById('priorityFilter').addEventListener('change', filterItems);
+            } catch (error) {
+                console.error('Error loading bucket list:', error);
+                document.getElementById('bucketItems').innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Error loading data. Please refresh the page.</p>';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

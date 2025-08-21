@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database CRUD Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        .auth-section { text-align: right; margin-bottom: 20px; padding: 10px; background: #e9ecef; border-radius: 4px; }
+        .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .login-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 300px; }
+        .login-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px; }
+        #adminPanel { display: none; }
+    </style>
+</head>
+<body>
+    <div class="auth-section">
+        <button id="loginBtn" onclick="showLoginModal()">Admin Login</button>
+        <button id="logoutBtn" onclick="auth.signOut()" style="display: none;">Logout</button>
+    </div>
+    
+    <h1>Database CRUD Operations Test</h1>
+    
+    <div id="loginModal" class="login-modal">
+        <div class="login-content">
+            <h3>Admin Login</h3>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email" required class="login-input" value="lifeexperience@example.com">
+                <input type="password" id="password" placeholder="Password" required class="login-input">
+                <button type="submit" style="width: 100%; margin-bottom: 10px;">Login</button>
+                <button type="button" onclick="closeLoginModal()" style="width: 100%; background: #6c757d;">Cancel</button>
+            </form>
+            <div id="loginError" style="color: red; margin-top: 10px; display: none;"></div>
+        </div>
+    </div>
+    
+    <div id="adminPanel">
+        <div class="test-section">
+            <h2>Experiences Table Tests</h2>
+            <button onclick="testExperiencesCRUD()">Run Experiences CRUD Test</button>
+            <div id="experiencesResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Bucket List Table Tests</h2>
+            <button onclick="testBucketListCRUD()">Run Bucket List CRUD Test</button>
+            <div id="bucketListResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Database Setup</h2>
+            <button onclick="createTables()">Create Tables</button>
+            <div id="setupResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Database Connection Test</h2>
+            <button onclick="testConnection()">Test Connection</button>
+            <div id="connectionResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Quick Add Experience Test</h2>
+            <button onclick="quickAddTest()">Test Add Single Experience</button>
+            <div id="quickAddResults"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/db.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        function logResult(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = message;
+            container.appendChild(div);
+        }
+
+        function clearResults(containerId) {
+            document.getElementById(containerId).innerHTML = '';
+        }
+
+        async function testConnection() {
+            clearResults('connectionResults');
+            logResult('connectionResults', 'Testing database connection...', 'info');
+            
+            try {
+                const { data, error } = await supabase.from('lifeexperiences').select('count', { count: 'exact' });
+                if (error) throw error;
+                logResult('connectionResults', '✅ Database connection successful!', 'success');
+                logResult('connectionResults', `Current experiences count: ${data.length}`, 'info');
+            } catch (error) {
+                logResult('connectionResults', `❌ Connection failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testExperiencesCRUD() {
+            clearResults('experiencesResults');
+            logResult('experiencesResults', 'Starting Experiences CRUD test...', 'info');
+            
+            let testExperienceId = null;
+
+            try {
+                const testExperience = {
+                    title: 'Test Experience - CRUD Test',
+                    date: '2024-01-01',
+                    category: 'learning',
+                    description: 'This is a test experience for CRUD operations',
+                    rating: 8
+                };
+
+                logResult('experiencesResults', '1. Testing CREATE operation...', 'info');
+                const createdExp = await db.addExperience(testExperience);
+                testExperienceId = createdExp.id;
+                logResult('experiencesResults', `✅ CREATE: Experience created with ID ${testExperienceId}`, 'success');
+
+                const experiences = await db.getExperiences();
+                const foundExp = experiences.find(exp => exp.id === testExperienceId);
+                if (foundExp) {
+                    logResult('experiencesResults', `✅ READ: Found experience "${foundExp.title}"`, 'success');
+                } else {
+                    throw new Error('Created experience not found in READ operation');
+                }
+
+                const { error: deleteError } = await supabase
+                    .from('lifeexperiences')
+                    .delete()
+                    .eq('id', testExperienceId);
+                
+                if (deleteError) throw deleteError;
+                logResult('experiencesResults', '✅ DELETE: Test experience deleted successfully', 'success');
+                logResult('experiencesResults', '🎉 All Experiences CRUD operations passed!', 'success');
+
+            } catch (error) {
+                logResult('experiencesResults', `❌ Test failed: ${error.message}`, 'error');
+                
+                if (testExperienceId) {
+                    try {
+                        await supabase.from('lifeexperiences').delete().eq('id', testExperienceId);
+                        logResult('experiencesResults', 'Cleanup: Test data removed', 'info');
+                    } catch (cleanupError) {
+                        logResult('experiencesResults', `Cleanup failed: ${cleanupError.message}`, 'error');
+                    }
+                }
+            }
+        }
+
+        async function testBucketListCRUD() {
+            clearResults('bucketListResults');
+            logResult('bucketListResults', 'Starting Bucket List CRUD test...', 'info');
+            
+            let testItemId = null;
+
+            try {
+                const testItem = {
+                    title: 'Test Bucket Item - CRUD Test',
+                    category: 'learning',
+                    priority: 'medium',
+                    completed: false
+                };
+
+                const createdItem = await db.addBucketItem(testItem);
+                testItemId = createdItem.id;
+                logResult('bucketListResults', `✅ CREATE: Bucket item created with ID ${testItemId}`, 'success');
+
+                const bucketList = await db.getBucketList();
+                const foundItem = bucketList.find(item => item.id === testItemId);
+                if (foundItem) {
+                    logResult('bucketListResults', `✅ READ: Found bucket item "${foundItem.title}"`, 'success');
+                } else {
+                    throw new Error('Created bucket item not found in READ operation');
+                }
+
+                const updates = {
+                    completed: true,
+                    completed_date: new Date().toISOString()
+                };
+                const updatedItem = await db.updateBucketItem(testItemId, updates);
+                if (updatedItem.completed) {
+                    logResult('bucketListResults', '✅ UPDATE: Bucket item marked as completed', 'success');
+                } else {
+                    throw new Error('UPDATE operation failed - item not marked as completed');
+                }
+
+                await db.deleteBucketItem(testItemId);
+                
+                const bucketListAfterDelete = await db.getBucketList();
+                const deletedItem = bucketListAfterDelete.find(item => item.id === testItemId);
+                if (!deletedItem) {
+                    logResult('bucketListResults', '✅ DELETE: Test bucket item deleted successfully', 'success');
+                } else {
+                    throw new Error('DELETE operation failed - item still exists');
+                }
+
+                logResult('bucketListResults', '🎉 All Bucket List CRUD operations passed!', 'success');
+
+            } catch (error) {
+                logResult('bucketListResults', `❌ Test failed: ${error.message}`, 'error');
+                
+                if (testItemId) {
+                    try {
+                        await db.deleteBucketItem(testItemId);
+                        logResult('bucketListResults', 'Cleanup: Test data removed', 'info');
+                    } catch (cleanupError) {
+                        logResult('bucketListResults', `Cleanup failed: ${cleanupError.message}`, 'error');
+                    }
+                }
+            }
+        }
+
+        async function createTables() {
+            clearResults('setupResults');
+            logResult('setupResults', 'Creating database tables...', 'info');
+            
+            try {
+                const { error: expError } = await supabase.rpc('exec_sql', {
+                    sql: `
+                        CREATE TABLE IF NOT EXISTS LifeExperiences (
+                            id BIGSERIAL PRIMARY KEY,
+                            title TEXT NOT NULL,
+                            date DATE NOT NULL,
+                            category TEXT NOT NULL,
+                            description TEXT NOT NULL,
+                            rating INTEGER CHECK (rating >= 1 AND rating <= 10),
+                            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                        );
+                    `
+                });
+                
+                if (expError) {
+                    const { error: altError } = await supabase
+                        .from('LifeExperiences')
+                        .select('id')
+                        .limit(1);
+                    
+                    if (altError && altError.message.includes('does not exist')) {
+                        throw new Error('Tables need to be created in Supabase SQL Editor. Cannot create via client.');
+                    }
+                }
+                
+                logResult('setupResults', '✅ LifeExperiences table ready', 'success');
+                logResult('setupResults', '🎉 Database setup complete! You can now run tests.', 'success');
+                
+            } catch (error) {
+                logResult('setupResults', `❌ Setup failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Authentication functions
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                await auth.signIn(email, password);
+                closeLoginModal();
+            } catch (error) {
+                const errorDiv = document.getElementById('loginError');
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        async function quickAddTest() {
+            clearResults('quickAddResults');
+            logResult('quickAddResults', 'Testing simple experience add...', 'info');
+            
+            try {
+                const testExp = {
+                    title: 'Quick Test',
+                    date: '2024-01-01',
+                    category: 'test',
+                    description: 'Quick test description',
+                    rating: 5
+                };
+                
+                logResult('quickAddResults', 'Attempting to add experience...', 'info');
+                const result = await db.addExperience(testExp);
+                logResult('quickAddResults', `✅ Success! Added experience with ID: ${result.id}`, 'success');
+                
+                // Clean up
+                await supabase.from('lifeexperiences').delete().eq('id', result.id);
+                logResult('quickAddResults', 'Cleanup completed', 'info');
+                
+            } catch (error) {
+                logResult('quickAddResults', `❌ Error: ${error.message}`, 'error');
+                logResult('quickAddResults', `Full error: ${JSON.stringify(error, null, 2)}`, 'error');
+            }
+        }
+
+        // Initialize auth when page loads
+        window.addEventListener('load', () => {
+            if (typeof auth !== 'undefined') {
+                auth.checkAuth();
+            }
+            testConnection();
+        });
+    </script>
+</body>
+</html>
