@@ -258,51 +258,6 @@
             opacity: 0.9;
         }
         
-        .time-remaining h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .time-stats { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 30px; 
-            margin-top: 30px; 
-        }
-        
-        .stat { 
-            text-align: center;
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .stat:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-        
-        .stat-number { 
-            font-size: 3.5rem; 
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .stat-label { 
-            font-size: 1.1rem; 
-            opacity: 0.9;
-            font-weight: 500;
-            margin-top: 10px;
-        }
-        
         .compact-seasons {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             color: #333;
@@ -346,53 +301,6 @@
             opacity: 0.8;
         }
         
-        .seasons h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .seasons-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 25px; 
-            margin-top: 30px; 
-        }
-        
-        .season { 
-            text-align: center; 
-            background: rgba(255,255,255,0.4); 
-            padding: 30px; 
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .season:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-        
-        .season-icon { 
-            font-size: 3rem; 
-            margin-bottom: 15px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-        }
-        
-        .season-count { 
-            font-size: 2.5rem; 
-            font-weight: 700;
-        }
-        
-        .season-label { 
-            font-size: 1rem; 
-            opacity: 0.8;
-            font-weight: 500;
-            margin-top: 8px;
-        }
-        
         .widget {
             background: rgba(255,255,255,0.05); 
             padding: 20px; 
@@ -405,116 +313,6 @@
         
         .widget:hover {
             transform: translateY(-3px);
-        }
-        
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-        
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .timeline-item {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-            position: relative;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .timeline-item:hover {
-            transform: translateX(10px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
-        }
-        
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -37px;
-            top: 20px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: 3px solid #0f0f23;
-        }
-        
-        .timeline-image {
-            width: 100%;
-            max-width: 300px;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .timeline-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 15px;
-        }
-        
-        .timeline-description {
-            font-size: 1rem;
-            color: #a0a0a0;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .timeline-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #a0a0a0;
-            font-size: 1rem;
-        }
-        
-        .timeline-edit-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            color: #ffffff;
-            padding: 8px 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            font-size: 0.9rem;
-        }
-        
-        .timeline-edit-btn:hover {
-            background: rgba(102, 126, 234, 0.2);
-            border-color: #667eea;
-        }
-        
-        .no-experience {
-            color: #666;
-            font-size: 1.2rem;
-            text-align: center;
         }
         
         .widget-header {
@@ -538,33 +336,6 @@
             font-size: 1.2rem;
         }
         
-        .quick-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        
-        .quick-stat {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .quick-stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-        
-        .quick-stat-label {
-            font-size: 0.9rem;
-            color: #a0a0a0;
-            font-weight: 500;
-        }
-        
         .life-progress {
             margin: 20px 0;
         }
@@ -577,38 +348,63 @@
             color: #a0a0a0;
         }
         
-        .experiences h2, .bucket-list h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 25px;
+        .progress-bar { 
+            background: rgba(255,255,255,0.2); 
+            height: 12px; 
+            border-radius: 6px; 
+            margin-top: 30px;
+            overflow: hidden;
         }
         
-        .experience-item { 
-            padding: 25px; 
-            border-left: 4px solid #667eea; 
-            margin-bottom: 20px; 
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 12px;
+        .progress-fill { 
+            background: linear-gradient(90deg, #ffffff 0%, #f0f0f0 100%);
+            height: 100%; 
+            border-radius: 6px; 
+            transition: width 0.8s ease;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .timeline-edit-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        
-        .experience-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
-        }
-        
-        .experience-date { 
-            color: #a0a0a0; 
             font-size: 0.9rem;
-            font-weight: 500;
         }
         
-        .experience-title { 
-            font-weight: 600; 
-            margin: 8px 0;
-            font-size: 1.1rem;
+        .timeline-edit-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #a0a0a0;
+            font-size: 1rem;
         }
         
         .floating-actions {
@@ -647,22 +443,6 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
         
-        .progress-bar { 
-            background: rgba(255,255,255,0.2); 
-            height: 12px; 
-            border-radius: 6px; 
-            margin-top: 30px;
-            overflow: hidden;
-        }
-        
-        .progress-fill { 
-            background: linear-gradient(90deg, #ffffff 0%, #f0f0f0 100%);
-            height: 100%; 
-            border-radius: 6px; 
-            transition: width 0.8s ease;
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
-        
         a {
             color: #667eea;
             text-decoration: none;
@@ -692,10 +472,6 @@
                 grid-row: 2;
                 min-height: 400px;
             }
-            
-            .experience-title-main {
-                font-size: 2.5rem;
-            }
         }
         
         @media (max-width: 768px) {
@@ -706,9 +482,6 @@
             }
             
             .header-left h1 { font-size: 2rem; }
-            .experience-title-main { font-size: 2rem; }
-            .experience-description-main { font-size: 1.1rem; }
-            .experience-showcase { padding: 30px; }
         }
     </style>
 </head>
@@ -814,13 +587,11 @@
                         Loading...
                     </div>
                 </div>
-
-
             </div>
 
             <div class="current-experience">
                 <div class="timeline" id="experienceTimeline">
-                    <div class="no-experience" style="text-align: center; padding: 60px; color: #666;">Loading experiences...</div>
+                    <div style="text-align: center; padding: 60px; color: #666;">Loading experiences...</div>
                 </div>
             </div>
         </div>
@@ -831,12 +602,12 @@
         <button class="fab fab-primary admin-only" onclick="window.location.href='pages/add-experience.html'" title="Add Experience" style="display: none;">+</button>
     </div>
     
-    <div id="loginModal" class="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-        <div class="login-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 300px; color: #333;">
+    <div id="loginModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 300px; color: #333;">
             <h3>Admin Login</h3>
             <form id="loginForm">
-                <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
-                <input type="password" id="password" placeholder="Password" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
+                <input type="email" id="email" placeholder="Email" required autocomplete="email" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
+                <input type="password" id="password" placeholder="Password" required autocomplete="current-password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
                 <button type="submit" style="width: 100%; margin-bottom: 10px; background: #007bff; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;">Login</button>
                 <button type="button" onclick="closeLoginModal()" style="width: 100%; background: #6c757d; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;">Cancel</button>
             </form>
@@ -849,44 +620,32 @@
     <script src="js/db.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        // Calculate real-time remaining time
         function updateTimeRemaining() {
-            const birthDate = new Date('1990-01-01'); // Adjust your birth date
+            const birthDate = new Date('1990-01-01');
             const targetAge = 75;
             const now = new Date();
             const currentAge = (now - birthDate) / (365.25 * 24 * 60 * 60 * 1000);
             const remainingYears = targetAge - currentAge;
             const remainingSeasons = Math.floor(remainingYears);
             
-            // Safely update elements if they exist
             const years = document.getElementById('years');
-            const months = document.getElementById('months');
             const days = document.getElementById('days');
-            const hours = document.getElementById('hours');
-            
-            if (years) years.textContent = Math.floor(remainingYears);
-            if (months) months.textContent = Math.floor(remainingYears * 12);
-            if (days) days.textContent = Math.floor(remainingYears * 365.25);
-            if (hours) hours.textContent = Math.floor(remainingYears * 365.25 * 24);
-            
-            // Update seasons safely
             const springs = document.getElementById('springs');
             const summers = document.getElementById('summers');
             const autumns = document.getElementById('autumns');
             const winters = document.getElementById('winters');
             
+            if (years) years.textContent = Math.floor(remainingYears);
+            if (days) days.textContent = Math.floor(remainingYears * 365.25);
             if (springs) springs.textContent = remainingSeasons;
             if (summers) summers.textContent = remainingSeasons;
             if (autumns) autumns.textContent = remainingSeasons;
             if (winters) winters.textContent = remainingSeasons;
         }
 
-        // Load experiences timeline
         async function loadExperienceTimeline() {
             try {
-                console.log('Loading experiences timeline...');
                 const experiences = await db.getExperiences();
-                console.log('Experiences loaded:', experiences.length);
                 const container = document.getElementById('experienceTimeline');
                 
                 if (experiences.length === 0) {
@@ -911,8 +670,6 @@
                                 <span>📅</span>
                                 <span>${new Date(exp.date).toLocaleDateString()}</span>
                             </div>
-                            ${exp.target_date ? `<div class="meta-item"><span>🎯</span><span>Target: ${new Date(exp.target_date).toLocaleDateString()}</span></div>` : ''}
-                            ${exp.target_date ? `<div class="meta-item"><span>📊</span><span>Days: ${Math.abs(Math.ceil((new Date(exp.target_date) - new Date(exp.date)) / (1000 * 60 * 60 * 24)))}</span></div>` : ''}
                             <div class="meta-item">
                                 <span>🏷️</span>
                                 <span>${exp.category}</span>
@@ -926,62 +683,13 @@
                 `).join('');
             } catch (error) {
                 console.error('Error loading experiences timeline:', error);
-                document.getElementById('experienceTimeline').innerHTML = `
-                    <div style="text-align: center; padding: 60px; color: #ff6b6b;">
-                        <h2 style="margin-bottom: 20px;">Connection Issue</h2>
-                        <p style="margin-bottom: 20px;">Unable to load experiences. Please check:</p>
-                        <ul style="text-align: left; margin-bottom: 30px;">
-                            <li>Database connection is working</li>
-                            <li>Tables are created properly</li>
-                            <li>Check browser console for errors</li>
-                        </ul>
-                        <button onclick="window.location.href='pages/test-crud.html'" style="background: #ff6b6b; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 16px; cursor: pointer;">Test Database</button>
-                    </div>
-                `;
             }
         }
         
         function editCurrentExperience(id) {
-            if (id) {
-                window.location.href = `pages/add-experience.html?edit=${id}`;
-            } else {
-                window.location.href = 'pages/add-experience.html';
-            }
+            window.location.href = id ? `pages/add-experience.html?edit=${id}` : 'pages/add-experience.html';
         }
 
-        // Load bucket list preview
-        async function loadBucketListPreview() {
-            try {
-                const bucketList = await db.getBucketList();
-                const container = document.getElementById('bucketListPreview');
-                
-                if (!container) {
-                    console.log('Bucket list preview container not found');
-                    return;
-                }
-                
-                if (bucketList.length === 0) {
-                    container.innerHTML = '<p style="color: #666; text-align: center;">No bucket list items yet. <a href="pages/bucket-list.html" style="color: #667eea;">Add your first goal!</a></p>';
-                    return;
-                }
-
-                const incomplete = bucketList.filter(item => !item.completed).slice(0, 3);
-                container.innerHTML = incomplete.map(item => `
-                    <div style="padding: 10px; border-left: 3px solid #ff9a9e; margin-bottom: 10px; background: #fef7f7;">
-                        <div style="font-weight: 600;">${item.title}</div>
-                        <div style="font-size: 0.9em; color: #666;">${item.category}</div>
-                    </div>
-                `).join('') + (bucketList.filter(item => !item.completed).length > 3 ? '<p style="text-align: center; margin-top: 15px;"><a href="pages/bucket-list.html" style="color: #667eea;">View all goals →</a></p>' : '');
-            } catch (error) {
-                console.error('Error loading bucket list:', error);
-                const container = document.getElementById('bucketListPreview');
-                if (container) {
-                    container.innerHTML = '<p style="color: #666; text-align: center;">Error loading bucket list</p>';
-                }
-            }
-        }
-
-        // Load recent experiences
         async function loadRecentExperiences() {
             try {
                 const experiences = await db.getExperiences();
@@ -992,62 +700,29 @@
                     return;
                 }
 
-                const recent = experiences.slice(0, 5); // Show last 5 experiences
+                const recent = experiences.slice(0, 5);
                 container.innerHTML = recent.map(exp => `
                     <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer;" onclick="editCurrentExperience(${exp.id})">
                         <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 3px;">${exp.title}</div>
                         <div style="font-size: 0.8rem; color: #a0a0a0;">${new Date(exp.date).toLocaleDateString()} • ${exp.category}</div>
                     </div>
-                `).join('') + (experiences.length > 5 ? '<p style="text-align: center; margin-top: 10px;"><a href="pages/experiences.html" style="color: #667eea; font-size: 0.9rem;">View all →</a></p>' : '');
+                `).join('');
             } catch (error) {
                 console.error('Error loading recent experiences:', error);
-                document.getElementById('recentExperiences').innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">Error loading experiences</p>';
             }
         }
 
-        // Load quick stats
-        async function loadQuickStats() {
-            try {
-                const [experiences, bucketList] = await Promise.all([
-                    db.getExperiences(),
-                    db.getBucketList()
-                ]);
-                
-                const totalExpEl = document.getElementById('totalExperiences');
-                const totalGoalsEl = document.getElementById('totalGoals');
-                
-                if (totalExpEl) totalExpEl.textContent = experiences.length;
-                if (totalGoalsEl) totalGoalsEl.textContent = bucketList.length;
-            } catch (error) {
-                console.error('Error loading quick stats:', error);
-            }
-        }
-
-        // Update clock
         function updateClock() {
             const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            const dateString = now.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
             const timeEl = document.getElementById('currentTime');
             const dateEl = document.getElementById('currentDate');
             
-            if (timeEl) timeEl.textContent = timeString;
-            if (dateEl) dateEl.textContent = dateString;
+            if (timeEl) timeEl.textContent = now.toLocaleTimeString();
+            if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', { 
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+            });
         }
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-        
         function toggleAuthSidebar() {
             const authSidebar = document.getElementById('authSidebar');
             const overlay = document.querySelector('.sidebar-overlay');
@@ -1079,7 +754,6 @@
             document.getElementById('loginModal').style.display = 'none';
         }
         
-        // Enhanced auth update UI function
         function updateAuthUI() {
             const adminElements = document.querySelectorAll('.admin-only');
             const sidebarLoginBtn = document.getElementById('sidebarLoginBtn');
@@ -1099,10 +773,9 @@
         async function handleLogout() {
             await auth.signOut();
             closeSidebar();
-            await loadExperienceTimeline(); // Reload to hide edit buttons
+            await loadExperienceTimeline();
         }
         
-        // Login form handler
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -1113,26 +786,23 @@
                 await auth.signIn(email, password);
                 closeLoginModal();
                 closeSidebar();
-                await loadExperienceTimeline(); // Reload to show edit buttons
+                await loadExperienceTimeline();
             } catch (error) {
                 errorDiv.textContent = error.message;
                 errorDiv.style.display = 'block';
             }
         });
 
-        // Initialize auth and UI
         auth.checkAuth().then(() => {
             updateAuthUI();
             loadExperienceTimeline();
         });
         
         updateTimeRemaining();
-        loadBucketListPreview();
         loadRecentExperiences();
-        loadQuickStats();
         updateClock();
-        setInterval(updateTimeRemaining, 60000); // Update every minute
-        setInterval(updateClock, 1000); // Update every second
+        setInterval(updateTimeRemaining, 60000);
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
