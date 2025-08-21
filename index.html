@@ -16,6 +16,21 @@
             color: #ffffff;
         }
         
+        .version-overlay {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            backdrop-filter: blur(10px);
+            z-index: 1002;
+        }
+        
         .container { 
             max-width: 1600px; 
             margin: 0 auto; 
@@ -698,6 +713,8 @@
     </style>
 </head>
 <body>
+    <div class="version-overlay">v0.1</div>
+    
     <div class="container">
         <button class="menu-toggle" onclick="toggleAuthSidebar()">☰</button>
         <button class="stats-toggle" onclick="toggleStats()" title="Toggle Stats Panel">👁️</button>
